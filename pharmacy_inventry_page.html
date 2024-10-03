@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Inventory - Pharmacy Dashboard</title>
+    <link rel="stylesheet" href="/css/pharmacyDashboard.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .app-container {
+            padding: 20px;
+            flex: 1; 
+        }
+        .sidebar {
+            width: 200px; 
+            background-color: #f8f9fa;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            height: 100vh; 
+        }
+        .sidebar-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sidebar-list-item {
+            margin: 10px 0;
+        }
+        .sidebar-list-item a {
+            text-decoration: none;
+            color: #333;
+        }
+        .sidebar-list-item.active a {
+            font-weight: bold;
+            color: #007bff; 
+        }
+        .account-info {
+            margin-top: auto; 
+            text-align: center;
+        }
+        .account-info-picture {
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .hospital-info img {
+            max-width: 850px; 
+            height: auto; 
+        }
+        .logout-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%; 
+        }
+        .logout-button:hover {
+            background-color: darkred;
+        }
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .inventory-table th, .inventory-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .inventory-table th {
+            background-color: #f2f2f2;
+        }
+
+        .account-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: auto; 
+        }
+        .logout-button {
+            padding: 10px 15px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%; 
+        }
+        .logout-button:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <ul class="sidebar-list">
+            <li class="sidebar-list-item"><a href="Home_pharmacy.html"><span>Home</span></a></li>
+            <li class="sidebar-list-item active"><a href="pharmacyDashboard.html"><span>Products</span></a></li>
+            <li class="sidebar-list-item"><a href="pharmacy_Add_new_stock.html"><span>Add New Stock</span></a></li>
+            <li class="sidebar-list-item"><a href="order_history.html"><span>Order History</span></a></li>
+            <li class="sidebar-list-item"><a href="notifications.html"><span>Notifications</span></a></li>
+        </ul>
+        <div class="account-info">
+            <div class="account-info-picture" onclick="logout()">
+                <img src="https://images.unsplash.com/photo-1527736947477-2790e28f3443?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTE2fHx3b21hbnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60" alt="Account">
+            </div>
+            <div class="account-info-name">Wagh Heart Care</div>
+                    <br>
+            <button class="logout-button" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+
+    <div class="app-container">
+        <h1>My Inventory</h1>
+        <table class="inventory-table">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Dosage</th>
+                    <th>Quantity</th>
+                    <th>Total Amount (₹)</th>
+                    <th>Date Sold</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Paracetamol</td>
+                    <td>500 mg</td>
+                    <td>2</td>
+                    <td>100</td>
+                    <td>2024-09-01</td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Logout functionality
+        function logout() {
+            alert('You have been logged out.');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

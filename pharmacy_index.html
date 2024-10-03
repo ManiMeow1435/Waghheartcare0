@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Dashboard</title>
+    <link rel="stylesheet" href="/css/pharmacyDashboard.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="app-icon">
+                    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">...</svg>
+                </div>
+            </div>
+            <ul class="sidebar-list">
+                <li class="sidebar-list-item"><a href="Home_pharmacy.html"><span>Home</span></a></li>
+                <li class="sidebar-list-item active"><a href="pharmacyDashboard.html"><span>Products</span></a></li>
+                <li class="sidebar-list-item"><a href="pharmacy_Add_new_stock.html"><span>Add New Stock</span></a></li>
+                <li class="sidebar-list-item"><a href="order_history.html"><span>Order History</span></a></li>
+                <li class="sidebar-list-item"><a href="notifications.html"><span>My Inventery</span></a></li>
+            </ul>
+            <div class="account-info">
+                
+                <button class="logout-button" id="logoutButton" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <div class="app-content">
+            <div class="app-content-header">
+                <h1 class="app-content-headerText">Page Title</h1>
+                <button class="mode-switch" title="Switch Theme">...</button>
+            </div>
+
+            <div class="app-content-main">
+                
+            </div>
+
+            <footer>
+                <p>&copy; 2024 Pharmacy Dashboard. All rights reserved.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="/Scripts/pharmacy.js"></script>
+    <script>
+        function logout() {
+            alert('You have been logged out.');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

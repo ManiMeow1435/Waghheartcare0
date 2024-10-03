@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill - Pharmacy Dashboard</title>
+    <link rel="stylesheet" href="/css/pharmacyDashboard.css">
+    <style>
+        body {
+            background-color: #f4f7f8; 
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+        .bill-container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .bill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+        }
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .product-table th, .product-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .total-section {
+            margin-top: 20px;
+        }
+        .total-section input {
+            margin: 5px;
+            padding: 10px;
+            width: 100px;
+        }
+        .print-button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .print-button:hover {
+            background-color: #45a049;
+        }
+        hr {
+            border: 1px solid #ccc;
+            margin: 10px 0;
+        }
+        @media print {
+            body {
+                background: white; 
+                color: black;
+            }
+            .bill-container {
+                box-shadow: none; 
+            }
+            .print-button {
+                display: none; 
+            }
+            .print-bill {
+                display: block;
+                margin: 20px auto;
+                text-align: left;
+                width: 100%;
+            }
+        }
+        .print-bill {
+            display: none;
+        }
+        .right-align {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="bill-container">
+        <div class="bill-header">
+            <h1>Wagh Heart Care</h1>
+            <button class="print-button" onclick="printBill()">Print</button>
+        </div>
+        <hr>
+
+        <p style="text-align: center;"><strong>Billing To:</strong></p>
+        <p style="text-align: center;">Wagh Heart Care Dattanagar</p>
+        <hr>
+
+        <p style="margin-bottom: 10px;">
+            <strong>Customer Name:</strong> <input type="text" id="customerName" style="margin-left: 10px; width: 200px;">
+            <strong>Customer Number:</strong> <input type="text" id="customerNumber" style="margin-left: 10px; width: 100px;">
+        </p>
+
+        <table class="product-table" id="productTable">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Price (₹)</th>
+                </tr>
+            </thead>
+            <tbody id="productBody">
+               
+            </tbody>
+        </table>
+
+        <div class="total-section">
+            <label for="gst">GST (%)</label>
+            <input type="number" id="gst" value="0" onchange="calculateTotal()">
+            <br>
+            <label for="discount">Discount (₹)</label>
+            <input type="number" id="discount" value="0" onchange="calculateTotal()">
+            <br>
+            <strong>Final Total: ₹<span id="finalTotal">0</span></strong>
+        </div>
+    </div>
+
+    <div class="print-bill" id="printBill">
+        <h2 style="text-align: center;">Wagh Heart Care</h2>
+        <h3 style="text-align: center;">Invoice</h3>
+        <hr>
+        <p style="text-align: left;">
+            Customer Name: <span id="printedCustomerName"></span> &nbsp;&nbsp;&nbsp;
+            <strong>Phone:</strong> <span id="printedCustomerNumber"></span> &nbsp;&nbsp;&nbsp;
+            <strong>Date:</strong> <span id="invoiceDate"></span>
+        </p>
+        <p style="text-align: left;">
+            Dattanagar Pune &nbsp;&nbsp;&nbsp;
+            <strong>Invoice Number:</strong> <span id="invoiceNumber"></span>
+        </p>
+        <p style="text-align: left;">
+            Pune, Maharashtra, India &nbsp;&nbsp;&nbsp;
+            <strong>Purchase Order No:</strong> <span id="purchaseOrderNo"></span>
+        </p>
+        <p style="text-align: left;">
+            ZIP Code: 411046 &nbsp;&nbsp;&nbsp;
+            <strong>GSTIN:</strong> 1234567899
+        </p>
+        <hr>
+
+        <table class="product-table" id="billingTable">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Dosage</th>
+                    <th>Amount (₹)</th>
+                </tr>
+            </thead>
+            <tbody id="billItems"></tbody>
+        </table>
+
+        <p><strong>Special notes and instructions:</strong></p>
+        <p>________________________________________________</p>
+
+        <div class="total-section right-align">
+            <p><strong>SUBTOTAL:</strong> ₹<span id="billTotal"></span></p>
+            <p><strong>DISCOUNT:</strong> -₹<span id="discountAmount">0</span></p>
+            <p><strong>(TAX RATE):</strong> <span id="taxRate">0%</span></p>
+            <p><strong>TAX:</strong> ₹<span id="billGST"></span></p>
+            <p><strong>TOTAL:</strong> ₹<span id="grandTotal"></span></p>
+        </div>
+    </div>
+
+    <script src="pharmacy.js"></script>
+    <script>
+        const products = [
+            { name: "Paracetamol", price: 10, quantity: 1 },
+            { name: "Ibuprofen", price: 20, quantity: 1 }
+            
+        ];
+
+        function loadProducts() {
+            const productBody = document.getElementById('productBody');
+            productBody.innerHTML = '';
+            products.forEach((product, index) => {
+                const total = product.price * product.quantity;
+                productBody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${product.name}</td>
+                        <td>${product.quantity}</td>
+                        <td>${total.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            let subtotal = 0;
+            products.forEach(product => {
+                subtotal += product.price * product.quantity;
+            });
+
+            const gst = parseFloat(document.getElementById('gst').value) || 0;
+            const discount = parseFloat(document.getElementById('discount').value) || 0;
+
+            const totalWithGST = subtotal + (subtotal * gst / 100);
+            const finalTotal = totalWithGST - discount;
+
+            document.getElementById('finalTotal').innerText = finalTotal.toFixed(2);
+        }
+
+        function printBill() {
+            
+            const billItems = products.map((product, index) => {
+                const total = product.price * product.quantity;
+                return `<tr>
+                    <td>${product.name}</td>
+                    <td>${product.quantity}</td>
+                    <td>Dosage</td>
+                    <td>₹${total.toFixed(2)}</td>
+                </tr>`;
+            }).join('');
+
+            const subtotal = products.reduce((acc, product) => acc + (product.price * product.quantity), 0);
+            const gst = parseFloat(document.getElementById('gst').value) || 0;
+            const discount = parseFloat(document.getElementById('discount').value) || 0;
+            const totalWithGST = subtotal + (subtotal * gst / 100);
+            const finalTotal = totalWithGST - discount;
+
+            document.getElementById('billItems').innerHTML = billItems;
+            document.getElementById('billTotal').innerText = subtotal.toFixed(2);
+            document.getElementById('grandTotal').innerText = finalTotal.toFixed(2);
+            document.getElementById('billGST').innerText = (subtotal * gst / 100).toFixed(2);
+            document.getElementById('discountAmount').innerText = discount.toFixed(2);
+            document.getElementById('invoiceNumber').innerText = "00001"; // invoice number
+            document.getElementById('purchaseOrderNo').innerText = "00002"; //purchase order
+
+            
+            document.getElementById('printedCustomerName').innerText = document.getElementById('customerName').value;
+            document.getElementById('printedCustomerNumber').innerText = document.getElementById('customerNumber').value;
+
+            
+            const date = new Date();
+            document.getElementById('invoiceDate').innerText = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+
+            
+            document.querySelector('.bill-container').style.display = 'none';
+            document.getElementById('printBill').style.display = 'block';
+
+            
+            window.print();
+            
+            document.querySelector('.bill-container').style.display = 'block';
+            document.getElementById('printBill').style.display = 'none';
+        }
+
+     
+        window.onload = loadProducts;
+    </script>
+</body>
+</html>

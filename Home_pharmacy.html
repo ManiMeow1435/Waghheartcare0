@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Pharmacy Dashboard</title>
+    <link rel="stylesheet" href="/css/pharmacyDashboard.css">
+    <style>
+        .search-bar {
+            margin-bottom: 20px;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative; 
+            top: -10px; 
+        }
+        .search-bar::placeholder {
+            color: #999;
+        }
+        .account-info-picture {
+            cursor: pointer;
+        }
+        .customer-details {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        .date-hover {
+            color: blue;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-right: 10px; 
+        }
+        .suggestions {
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            max-height: 150px;
+            overflow-y: auto;
+            position: absolute;
+            width: calc(100% - 20px);
+            z-index: 1000;
+        }
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .suggestion-item:hover {
+            background-color: #f0f0f0;
+        }
+        .hospital-info {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .hospital-info img {
+            max-width: 850px; 
+            height: 650; 
+        }
+
+        .account-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: auto;
+        }
+        .logout-button {
+            padding: 10px 15px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%; 
+        }
+        .logout-button:hover {
+            background-color: darkred;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="app-icon">
+                    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">...</svg>
+                </div>
+            </div>
+            <ul class="sidebar-list">
+              <li class="sidebar-list-item active"><a href="Home_pharmacy.html"><span>Home</span></a></li>
+              <li class="sidebar-list-item"><a href="pharmacyDashboard.html"><span>Products</span></a></li>
+              <li class="sidebar-list-item"><a href="pharmacy_Add_new_stock.html"><span>Add New Stock</span></a></li>
+              <li class="sidebar-list-item"><a href="order_history.html"><span>Order History</span></a></li>
+              <li class="sidebar-list-item"><a href="notifications.html"><span>My Inventery</span></a></li>
+            </ul>
+            <div class="account-info">
+                <div class="account-info-picture" onclick="logout()">
+                    <img src="https://images.unsplash.com/photo-1527736947477-2790e28f3443?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTE2fHx3b21hbnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60" alt="Account">
+                </div>
+                <div class="account-info-name">Wagh Heart Care</div>
+                <br>
+                <button class="logout-button" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+
+        <div class="app-content">
+            <div class="app-content-header">
+                <h1 class="app-content-headerText">Home</h1>
+                <button class="mode-switch" title="Switch Theme">...</button>
+            </div>
+        
+            <div class="app-content-main">
+                <br>
+                <input type="text" id="customerSearch" class="search-bar" placeholder="     Enter Customer Phone Number or Name">
+                <div id="suggestions" class="suggestions" style="display: none;"></div>
+        
+                
+                <div class="hospital-info" id="hospitalInfo">
+                    <img src="\icons\pharmacy-health-science-research-and-business-concept-chart-with-keywords-and-icons-on-white-background-2E3XG59.jpg" alt="Wagh Hospital Logo">
+                    <h2 style="color: white; font-style: italic;">Your Health, Our Priority!</h2>
+                </div>
+        
+                <!-- Customer Details Section -->
+                <div id="customerDetails" class="customer-details" style="display: none;">
+                    <h3>Customer Details</h3>
+                    <div id="customerInfo"></div>
+                    <div id="purchaseDates"></div>
+                    <div id="purchaseMedicines" class="medicines"></div>
+                </div>
+            </div>
+        
+            <footer>
+                <p>&copy; 2024 Pharmacy Dashboard. All rights reserved.</p>
+            </footer>
+        </div>
+        
+
+    <script src="/Scripts/pharmacy.js"></script>
+    <script>
+        
+        const customerData = {
+            '7066081761': {
+                name: 'Prajwal Bhoite',
+                phone: '7066081761',
+                history: [
+                    { productName: 'Paracetamol', dosage: '500 mg', quantity: 2, totalAmount: 100, dateSold: '2024-09-01' },
+                    { productName: 'Ibuprofen', dosage: '400 mg', quantity: 1, totalAmount: 20, dateSold: '2024-09-03' },
+                    { productName: 'Deodorant', dosage: '150 ml', quantity: 3, totalAmount: 180, dateSold: '2024-09-03' }
+                ]
+            },
+            '9139231831': {
+                name: 'Sanket Kulkarni',
+                phone: '9139231831',
+                history: [
+                    { productName: 'Cetirizine', dosage: '10 mg', quantity: 1, totalAmount: 30, dateSold: '2024-09-02' },
+                    { productName: 'Ibuprofen', dosage: '400 mg', quantity: 2, totalAmount: 50, dateSold: '2024-09-04' },
+                    { productName: 'Ibuprofen', dosage: '3 pcs', quantity: 1, totalAmount: 100, dateSold: '2024-09-04' }
+                ]
+            }
+        };
+
+        const customerSearchInput = document.getElementById('customerSearch');
+        const suggestionsDiv = document.getElementById('suggestions');
+        const hospitalInfo = document.getElementById('hospitalInfo');
+
+        customerSearchInput.addEventListener('input', function() {
+            const input = this.value.trim().toLowerCase();
+            suggestionsDiv.innerHTML = ''; 
+            suggestionsDiv.style.display = 'none'; 
+
+            
+            hospitalInfo.style.display = 'none';
+
+            if (input) {
+                const matches = Object.values(customerData).filter(customer =>
+                    customer.name.toLowerCase().startsWith(input)
+                );
+
+                if (matches.length > 0) {
+                    matches.forEach(customer => {
+                        const suggestionItem = document.createElement('div');
+                        suggestionItem.className = 'suggestion-item';
+                        suggestionItem.textContent = customer.name;
+                        suggestionItem.onclick = () => selectCustomer(customer);
+                        suggestionsDiv.appendChild(suggestionItem);
+                    });
+                    suggestionsDiv.style.display = 'block'; 
+                }
+            }
+        });
+
+        customerSearchInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                showCustomerHistory();
+            }
+        });
+
+        function selectCustomer(customer) {
+            customerSearchInput.value = customer.name;
+            showCustomerHistory(); 
+            suggestionsDiv.style.display = 'none'; 
+        }
+
+        function showCustomerHistory() {
+            const customerSearch = customerSearchInput.value.trim();
+            const customerInfo = document.getElementById('customerInfo');
+            const purchaseDates = document.getElementById('purchaseDates');
+            const purchaseMedicines = document.getElementById('purchaseMedicines');
+            const customerDetailsSection = document.getElementById('customerDetails');
+
+            customerInfo.innerHTML = ''; 
+            purchaseDates.innerHTML = ''; 
+            purchaseMedicines.innerHTML = '';
+            customerDetailsSection.style.display = 'none'; 
+
+            for (const [phone, data] of Object.entries(customerData)) {
+                if (phone === customerSearch || data.name.toLowerCase() === customerSearch.toLowerCase()) {
+                    
+                    customerInfo.innerHTML = `<strong>Name:</strong> ${data.name} <br> <strong>Phone:</strong> ${data.phone}`;
+                    
+                   
+                    const dates = [...new Set(data.history.map(sale => sale.dateSold))];
+                    dates.forEach(date => {
+                        const dateSpan = document.createElement('span');
+                        dateSpan.className = 'date-hover';
+                        dateSpan.textContent = date;
+                        dateSpan.title = 'Click to view medicines';
+                        dateSpan.onclick = () => showMedicines(date, data.history);
+                        purchaseDates.appendChild(dateSpan);
+                    });
+
+                    customerDetailsSection.style.display = 'block'; 
+                    break;
+                }
+            }
+        }
+
+        function showMedicines(date, history) {
+            const fullHistoryBody = document.getElementById('purchaseMedicines');
+            fullHistoryBody.innerHTML = ''; // Clear previous medicines
+
+            // Filter and display medicines for the selected date
+            const medicines = history.filter(sale => sale.dateSold === date);
+            medicines.forEach(sale => {
+                const medicineInfo = document.createElement('div');
+                medicineInfo.innerHTML = `${sale.productName} (${sale.dosage}) - ₹${sale.totalAmount} (Qty: ${sale.quantity})`;
+                fullHistoryBody.appendChild(medicineInfo);
+            });
+        }
+
+        // Logout functionality
+        function logout() {
+            alert('You have been logged out.');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>New Appointment</title>
+    <link rel="stylesheet" href="CSS/receptionDashboard.css">
+    <link rel="stylesheet" href="CSS/createNewAppointmentPage.css">
+  </head>
+  <body>
+    <div class="top-pannel">
+      <img src="/icons/alternative-logo.webp">
+      <p class="moto">Healing Hands, Caring Hearts.</p>
+    </div>
+    <div class="side-pannel">
+      <div class="sidebar-menu" id="home"><img src="/icons/home.svg"></div>
+      <div class="sidebar-menu"><img src="/icons/search.svg"></div>
+      <div class="sidebar-menu"><img src="/icons/notifications.svg"></div>
+      <div class="sidebar-menu"><img src="/icons/hamburger-menu.svg"></div>
+    </div>
+    <div class="main-content">
+      <h2>Paitent Peronal Information</h2>
+      <form>
+        <label>Dr.</label>
+        <select id="dr" required>
+          <option selected>Select</option>
+          <option>Dr.Rajesh</option>
+          <option>Dr.Vrushali</option>
+        </select>
+
+        <label>Referred By</label>
+        <input type="text" id="referred-by" placeholder="Enter name of Dr. who has sent reference" required>
+
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Enter patients full name" required>
+
+        <label>Mobile Number</label>
+        <input type="tel" id="mobile-no" placeholder="Enter patients mobile no" required>
+
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Enter patients email">
+
+        <label>Age</label>
+        <input type="number" id="age">
+
+        <label>Height</label>
+        <input type="number" id="height">
+
+        <label>Weight</label>
+        <input type="number" id="weight">
+
+        <label>Gender</label>
+        <select id="gender" required>
+          <option selected>Select</option>
+          <option>Male</option>
+          <option>Female</option>
+        </select>
+
+        <label>Address Line 1</label>
+        <input type="text" id="address" rows="2" placeholder="Enter patients address">
+
+        <label>Pincode</label>
+        <input type="number" id="pincode">
+
+        <label>City</label>
+        <input type="text" id="city">
+
+        <label>State</label>
+        <input type="text" id="state">
+
+        <label>Country</label>
+        <input type="text" id="country">
+
+        <button id="submit" type="submit">Submit</button>
+      </form>
+    </div>
+    <script type="module" src="Scripts/createNewAppointmentPage.js"></script>
+    <script type="module" src="Scripts/comman.js"></script>
+  </body>
+</html>

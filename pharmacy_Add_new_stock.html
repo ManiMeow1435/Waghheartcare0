@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Stock - Pharmacy Dashboard</title>
+    <link rel="stylesheet" href="/css/pharmacyDashboard.css">
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .stock-info {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .submit-button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .submit-button:hover {
+            background-color: #218838;
+        }
+
+        .account-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: auto; 
+        }
+        .logout-button {
+            padding: 10px 15px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%; 
+        }
+        .logout-button:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="app-icon">
+                    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">...</svg>
+                </div>
+            </div>
+            <ul class="sidebar-list">
+              <li class="sidebar-list-item"><a href="Home_pharmacy.html"><span>Home</span></a></li>
+              <li class="sidebar-list-item"><a href="pharmacyDashboard.html"><span>Products</span></a></li>
+              <li class="sidebar-list-item active"><a href="pharmacy_Add_new_stock.html"><span>Add New Stock</span></a></li>
+              <li class="sidebar-list-item"><a href="pharmacy_order_history.html"><span>Order History</span></a></li>
+              <li class="sidebar-list-item"><a href="notifications.html"><span>My Inventery</span></a></li>
+            </ul>
+            <div class="account-info">
+                <div class="account-info-picture" onclick="logout()">
+                    <img src="https://images.unsplash.com/photo-1527736947477-2790e28f3443?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTE2fHx3b21hbnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60" alt="Account">
+                </div>
+                    <div class="account-info-name">Wagh Heart Care</div>
+                    <br>
+                    <button class="logout-button" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+
+        <div class="app-content">
+            <div class="app-content-header">
+                <h1 class="app-content-headerText">Add New Stock</h1>
+            </div>
+
+            <div class="app-content-main">
+                <div class="form-container">
+                    <form id="addStockForm">
+                        <div class="form-group">
+                            <label for="medicineName">Medicine Name</label>
+                            <input type="text" id="medicineName" required autocomplete="off">
+                            <div class="suggestions" id="suggestions"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dosage">Dosage</label>
+                            <select id="dosage" required>
+                                <option value="">Select Dosage</option>
+                                <option value="200 mg">200 mg</option>
+                                <option value="400 mg">400 mg</option>
+                                <option value="500 mg">500 mg</option>
+                                <option value="New">Enter New Dosage</option>
+                            </select>
+                            <input type="text" id="newDosage" placeholder="Enter new dosage" style="display:none;">
+                        </div>
+                        <div class="form-group">
+                            <label for="availableStock">Available Stock</label>
+                            <input type="number" id="availableStock" required>
+                            <div class="stock-info" id="currentStockInfo">Current stock: 0</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Price (in ₹)</label>
+                            <input type="number" id="price" min="1" required>
+                        </div>
+                        <button type="submit" class="submit-button">Add Stock</button>
+                    </form>
+                </div>
+            </div>
+
+            <footer>
+                <p>&copy; 2024 Pharmacy Dashboard. All rights reserved.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        const existingProducts = {
+    'Paracetamol': { '200 mg': 10, '400 mg': 5 },
+    'Ibuprofen': { '400 mg': 5, '600 mg': 8 },
+    'Amoxicillin': { '250 mg': 15 },
+    'Cetirizine': { '10 mg': 8, '20 mg': 12 },
+    'Aspirin': { '300 mg': 20 }
+};
+
+document.getElementById('medicineName').addEventListener('input', function() {
+    const input = this.value.toLowerCase();
+    const suggestionsContainer = document.getElementById('suggestions');
+    suggestionsContainer.innerHTML = ''; 
+    if (input.length > 0) {
+        const filteredProducts = Object.keys(existingProducts).filter(product => product.toLowerCase().startsWith(input));
+        filteredProducts.forEach(product => {
+            const suggestionItem = document.createElement('div');
+            suggestionItem.textContent = product;
+            suggestionItem.classList.add('suggestion-item');
+            suggestionItem.onclick = () => selectSuggestion(product);
+            suggestionsContainer.appendChild(suggestionItem);
+        });
+        suggestionsContainer.style.display = filteredProducts.length > 0 ? 'block' : 'none';
+    } else {
+        suggestionsContainer.style.display = 'none';
+    }
+});
+
+
+function selectSuggestion(product) {
+    document.getElementById('medicineName').value = product;
+    document.getElementById('suggestions').style.display = 'none';
+    updateDosageOptions(product);
+    document.getElementById('availableStock').value = ''; 
+}
+
+
+document.getElementById('medicineName').addEventListener('keydown', function(event) {
+    if (event.key === 'Tab' || event.key === 'Enter') {
+        const suggestions = document.querySelectorAll('.suggestion-item');
+        if (suggestions.length > 0) {
+            selectSuggestion(suggestions[0].textContent);
+            event.preventDefault(); //
+        }
+    }
+});
+
+function updateDosageOptions(product) {
+    const dosageSelect = document.getElementById('dosage');
+    dosageSelect.innerHTML = '<option value="">Select Dosage</option>';
+    Object.keys(existingProducts[product]).forEach(dosage => {
+        const option = document.createElement('option');
+        option.value = dosage;
+        option.textContent = dosage;
+        dosageSelect.appendChild(option);
+    });
+}
+
+document.getElementById('dosage').addEventListener('change', function() {
+    const medicineName = document.getElementById('medicineName').value;
+    const selectedDosage = this.value;
+    if (selectedDosage && existingProducts[medicineName][selectedDosage] !== undefined) {
+        document.getElementById('currentStockInfo').textContent = `Current stock: ${existingProducts[medicineName][selectedDosage]}`;
+    } else {
+        document.getElementById('currentStockInfo').textContent = 'Current stock: 0';
+    }
+    const newDosageInput = document.getElementById('newDosage');
+    newDosageInput.style.display = selectedDosage === 'New' ? 'block' : 'none';
+    if (selectedDosage !== 'New') {
+        newDosageInput.value = ''; // Clear new dosage input if not selecting new
+    }
+});
+
+document.getElementById('addStockForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const medicineName = document.getElementById('medicineName').value;
+    const dosage = document.getElementById('dosage').value === 'New' ? document.getElementById('newDosage').value : document.getElementById('dosage').value;
+    const availableStock = document.getElementById('availableStock').value;
+    const price = document.getElementById('price').value;
+
+    alert(`Added Stock: 
+    Medicine Name: ${medicineName} 
+    Dosage: ${dosage} 
+    Available Stock: ${availableStock} 
+    Price: ₹${price}`);
+    
+    this.reset();
+    document.getElementById('suggestions').style.display = 'none'; 
+    document.getElementById('currentStockInfo').textContent = 'Current stock: 0'; 
+    info
+});
+
+function logout() {
+    alert('You have been logged out.');
+    window.location.href = 'index.html';
+}
+    </script>
+</body>
+</html>

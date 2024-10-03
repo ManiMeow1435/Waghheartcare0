@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<head>
+  <title>
+    Reception Dashboard
+  </title>
+  <link rel="stylesheet" href="/css/receptionDashboard.css">
+</head>
+<body>
+  <div class="top-pannel">
+    <img src="/icons/alternative-logo.webp">
+    <p class="moto">Healing Hands, Caring Hearts.</p>
+    <div class="top-pannel-buttons">
+      <button id="js-create-appointment-button"> Create an appointment</button>
+      <button class="js-logout-button">Logout</button>
+    </div>
+  </div>
+  <div class="side-pannel">
+    <div class="sidebar-menu" id="home" ><img src="/icons/home.svg"></div>
+    <div class="sidebar-menu"><img src="/icons/search.svg"></div>
+    <div class="sidebar-menu"><img src="/icons/notifications.svg"></div>
+    <div class="sidebar-menu"><img src="/icons/hamburger-menu.svg"></div>
+  </div>
+  <div class="main-content">
+
+    <div class="overall-info">
+      <div class="patient-count-text">
+        <p style="display: inline-block;">Dr. Rajesh's current patient count :</p>
+        <input class="patient-count-number-rajesh" type="number" readonly> 
+      </div>   
+      <div class="patient-count-text">
+        <p style="display: inline-block;">Dr. Vrushali's current patient count :</p>
+        <input class="patient-count-number-vrushali" type="number" readonly> 
+      </div>
+    </div>
+  
+    <div class="drs-section">
+      <div class="dr-rajesh-section">
+        <div class="section-heading">Dr. Rajesh's Patients</div>
+        <div class="column-names">
+          <div>Appt. No.</div>
+          <div>Name</div>
+          <div>Mobile No.</div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="column-details-rajesh">
+        </div>
+      </div>
+      <div class="dr-vrushali-section">
+        <div class="section-heading">Dr. Vrushali's Patients</div>
+        <div class="column-names">
+          <div>Appt. No.</div>
+          <div>Name</div>
+          <div>Mobile No.</div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="column-details-vrushali">
+        </div>
+      </div>
+    </div>
+
+    <div class="consulted-patients">
+      <h2>Consulted Patients:</h2>
+      <div class="drs-section">
+        <div class="dr-rajesh-section">
+          <div class="section-heading">Dr. Rajesh's Patients</div>
+          <div class="column-names">
+            <div>Appt. No.</div>
+            <div>Name</div>
+            <div>Mobile No.</div>
+            <div></div>
+            <div></div>
+          </div>
+          <div class="consulted-details-rajesh">
+          </div>
+        </div>
+        <div class="dr-vrushali-section">
+          <div class="section-heading">Dr. Vrushali's Patients</div>
+          <div class="column-names">
+            <div>Appt. No.</div>
+            <div>Name</div>
+            <div>Mobile No.</div>
+            <div></div>
+            <div></div>
+          </div>
+          <div class="consulted-details-vrushali">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+  <script type="module" src="/Scripts/receptionDashboard.js"></script>
+  <script type="module" src="/Scripts/comman.js"></script>
+</body>
